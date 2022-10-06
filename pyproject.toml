@@ -23,7 +23,8 @@ dependencies = [
     "importlib-metadata; python_version<'3.8'",
     "catkin-pkg",
     "rospkg >= 1.4.0",
-    "rosdistro >= 0.7.5"
+    "rosdistro >= 0.7.5",
+    "packaging",
 ]
 [project.optional-dependencies]
 test = [

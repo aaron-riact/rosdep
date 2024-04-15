@@ -295,4 +295,5 @@ class AptInstaller(PackageManagerInstaller):
         if quiet:
             base_cmd.append('-qq')
 
-        return [self.elevate_priv(base_cmd + [p]) for p in _iterate_packages(packages, reinstall)]
+        # sort to make the output deterministic
+        return [self.elevate_priv(base_cmd + sorted(_iterate_packages(packages, reinstall)))]

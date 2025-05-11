@@ -287,12 +287,6 @@ class AptInstaller(PackageManagerInstaller):
         version = output.splitlines()[0].split(b' ')[1].decode()
         return ['apt-get {}'.format(version)]
 
-    def _get_install_commands_for_package(self, base_cmd, package):
-        def pkg_command(p):
-            return self.elevate_priv(base_cmd + [p])
-
-        return pkg_command(package)
-
     def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
         packages = self.get_packages_to_install(resolved, reinstall=reinstall)
         if not packages:
@@ -303,4 +297,4 @@ class AptInstaller(PackageManagerInstaller):
         if quiet:
             base_cmd.append('-qq')
 
-        return [self._get_install_commands_for_package(base_cmd, p) for p in _iterate_packages(packages, reinstall)]
+        return [self.elevate_priv(base_cmd + [p]) for p in _iterate_packages(packages, reinstall)]

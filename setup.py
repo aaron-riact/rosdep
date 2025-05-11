@@ -2,7 +2,7 @@ import os
 from setuptools import setup
 
 kwargs = {
-    'name': 'rosdep',
+    'name': 'rosdep2',
     # same version as in:
     # - src/rosdep2/_version.py
     # - stdeb.cfg
@@ -28,9 +28,9 @@ kwargs = {
     'maintainer': 'ROS Infrastructure Team',
     'project_urls': {
         'Source code':
-        'https://github.com/ros-infrastructure/rosdep',
+        'https://github.com/krisl/rosdep',
         'Issue tracker':
-        'https://github.com/ros-infrastructure/rosdep/issues',
+        'https://github.com/krisl/rosdep/issues',
     },
     'url': 'http://wiki.ros.org/rosdep',
     'keywords': ['ROS'],
@@ -43,7 +43,7 @@ kwargs = {
     'classifiers': [
         'Programming Language :: Python',
         'License :: OSI Approved :: BSD License'],
-    'description': 'rosdep package manager abstraction tool for ROS',
+    'description': 'rosdep - enhanced with lovely quality of life improvements',
     'long_description': 'Command-line tool for installing system '
                         'dependencies on a variety of platforms.',
     'license': 'BSD',

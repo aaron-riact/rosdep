@@ -123,14 +123,12 @@ class DependencyGraph(defaultdict):
             if item not in result and item[1] != []:
                 result.append(item)
         # Squash the results by installer_key
-        squashed_result = []
-        previous_installer_key = None
+        squashed_result = {}
         for installer_key, resolved in result:
-            if previous_installer_key != installer_key:
-                squashed_result.append((installer_key, []))
-                previous_installer_key = installer_key
-            squashed_result[-1][1].extend(resolved)
-        return squashed_result
+            if installer_key not in squashed_result:
+                squashed_result[installer_key] = []
+            squashed_result[installer_key].extend(resolved)
+        return [*squashed_result.items()]
 
     def __get_ordered_uninstalled(self, key):
         uninstalled = []

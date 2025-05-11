@@ -110,12 +110,10 @@ def test_PipInstaller():
 
         # no interactive option with PIP
         mock_method.return_value = ['a', 'b']
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
-                    expected_prefix + ['mock-pip', 'install', '-U', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
         val = installer.get_install_command(['whatever'], interactive=False)
         assert val == expected, val
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
-                    expected_prefix + ['mock-pip', 'install', '-U', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
         val = installer.get_install_command(['whatever'], interactive=True)
         assert val == expected, val
     try:

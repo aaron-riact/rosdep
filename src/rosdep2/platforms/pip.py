@@ -212,4 +212,4 @@ class PipInstaller(PackageManagerInstaller):
             cmd.append('-q')
         if reinstall:
             cmd.append('-I')
-        return [self.elevate_priv(cmd + [p]) for p in packages]
+        return [self.elevate_priv(cmd + sorted(packages))]

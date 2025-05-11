@@ -259,7 +259,7 @@ class Installer(object):
         """
         raise NotImplementedError('is_installed', resolved_item)
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=False):
+    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
         """
         :param resolved: list of resolved installation items, ``[opaque]``
         :param interactive: If `False`, disable interactive prompts,
@@ -388,8 +388,8 @@ class PackageManagerInstaller(Installer):
         """
         raise NotImplementedError('subclasses must implement get_version_strings method')
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
-        raise NotImplementedError('subclasses must implement', resolved, interactive, reinstall, quiet)
+    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
+        raise NotImplementedError('subclasses must implement', resolved, interactive, reinstall, quiet, oneshot)
 
     def get_depends(self, rosdep_args):
         """
@@ -467,7 +467,7 @@ class RosdepInstaller(object):
 
         return uninstalled, errors
 
-    def install(self, uninstalled, interactive=True, simulate=False, oneshot=False,
+    def install(self, uninstalled, interactive=True, simulate=False, oneshot=[],
                 continue_on_error=False, reinstall=False, verbose=False, quiet=False):
         """
         Install the uninstalled rosdeps.  This API is for the bulk
@@ -528,7 +528,7 @@ class RosdepInstaller(object):
         if failures:
             raise InstallFailed(failures=failures)
 
-    def install_resolved(self, installer_key, resolved, simulate=False, interactive=True, oneshot=False,
+    def install_resolved(self, installer_key, resolved, simulate=False, interactive=True, oneshot=[],
                          reinstall=False, continue_on_error=False, verbose=False, quiet=False):
         """
         Lower-level API for installing a rosdep dependency.  The

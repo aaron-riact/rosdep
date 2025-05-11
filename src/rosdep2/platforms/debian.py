@@ -262,12 +262,10 @@ def dpkg_detect(pkgs, exec_fn=None):
 
 
 def _iterate_packages(packages, reinstall):
+    resolve = dpkg_detect if reinstall else lambda x: x
     for p, is_virtual, providers in _read_apt_cache_showpkg(packages):
         if is_virtual:
-            if reinstall:
-                yield from dpkg_detect(providers)
-            else:
-                yield from providers
+            yield from resolve(providers)
         else:
             yield p
 

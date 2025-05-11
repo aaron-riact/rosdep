@@ -760,7 +760,7 @@ def error_to_human_readable(error):
 def command_install(lookup, packages, options):
     # map options
     install_options = dict(interactive=not options.default_yes, verbose=options.verbose,
-                           reinstall=options.reinstall,
+                           reinstall=options.reinstall, oneshot=options.one_shot,
                            continue_on_error=options.robust, simulate=options.simulate, quiet=options.quiet)
 
     # setup installer

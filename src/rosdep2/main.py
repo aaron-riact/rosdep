@@ -355,6 +355,13 @@ def _rosdep_main(args):
                            'is in the provided list. The option can be supplied '
                            'multiple times. A space separated list of installers can also '
                            'be passed as a string. Example: `--filter-for-installers "apt pip"`')
+    parser.add_option('--one-shot', action='append', default=[],
+                      metavar='INSTALLER_KEY',
+                      help="Affects the 'install' verb. If supplied, each installer "
+                           'that supports it, will use a single invocation to install '
+                           'its packages. The option can be supplied '
+                           'multiple times. A space separated list of installers can also '
+                           'be passed as a string. Example: `--one-shot "apt pip"`')
     parser.add_option('--from-paths', dest='from_paths',
                       default=False, action='store_true',
                       help="Affects the 'check', 'keys', and 'install' verbs. "

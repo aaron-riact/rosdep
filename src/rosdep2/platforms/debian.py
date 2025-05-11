@@ -267,7 +267,7 @@ def _iterate_packages(packages, reinstall):
             if reinstall:
                 yield from dpkg_detect(providers)
             else:
-                yield providers
+                yield from providers
         else:
             yield p
 
@@ -287,14 +287,11 @@ class AptInstaller(PackageManagerInstaller):
         version = output.splitlines()[0].split(b' ')[1].decode()
         return ['apt-get {}'.format(version)]
 
-    def _get_install_commands_for_package(self, base_cmd, package_or_list):
+    def _get_install_commands_for_package(self, base_cmd, package):
         def pkg_command(p):
             return self.elevate_priv(base_cmd + [p])
 
-        if isinstance(package_or_list, list):
-            return [pkg_command(p) for p in package_or_list]
-        else:
-            return pkg_command(package_or_list)
+        return pkg_command(package)
 
     def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
         packages = self.get_packages_to_install(resolved, reinstall=reinstall)

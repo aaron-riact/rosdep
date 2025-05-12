@@ -259,14 +259,14 @@ class Installer(object):
         """
         raise NotImplementedError('is_installed', resolved_item)
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
+    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
         """
         :param resolved: list of resolved installation items, ``[opaque]``
         :param interactive: If `False`, disable interactive prompts,
           e.g. Pass through ``-y`` or equivalant to package manager.
         :param reinstall: If `True`, install everything even if already installed
         """
-        raise NotImplementedError('get_package_install_command', resolved, interactive, reinstall, quiet)
+        raise NotImplementedError('get_package_install_command', resolved, interactive, reinstall, quiet, oneshot)
 
     def get_depends(self, rosdep_args):
         """
@@ -388,8 +388,8 @@ class PackageManagerInstaller(Installer):
         """
         raise NotImplementedError('subclasses must implement get_version_strings method')
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
-        raise NotImplementedError('subclasses must implement', resolved, interactive, reinstall, quiet)
+    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
+        raise NotImplementedError('subclasses must implement', resolved, interactive, reinstall, quiet, oneshot)
 
     def get_depends(self, rosdep_args):
         """
@@ -459,7 +459,7 @@ class RosdepInstaller(object):
 
         return uninstalled
 
-    def install(self, uninstalled, interactive=True, simulate=False,
+    def install(self, uninstalled, interactive=True, simulate=False, oneshot=[],
                 continue_on_error=False, reinstall=False, verbose=False, quiet=False):
         """
         Install the uninstalled rosdeps.  This API is for the bulk
@@ -499,20 +499,18 @@ class RosdepInstaller(object):
             print('install: uninstalled keys are %s' % ', '.join(uninstalled_list))
 
         # Squash uninstalled again, in case some dependencies were already installed
-        squashed_uninstalled = []
-        previous_installer_key = None
+        squashed_uninstalled = {}
         for installer_key, resolved in uninstalled:
-            if previous_installer_key != installer_key:
-                squashed_uninstalled.append((installer_key, []))
-                previous_installer_key = installer_key
-            squashed_uninstalled[-1][1].extend(resolved)
+            if installer_key not in squashed_uninstalled:
+                squashed_uninstalled[installer_key] = []
+            squashed_uninstalled[installer_key].extend(resolved)
 
         failures = []
-        for installer_key, resolved in squashed_uninstalled:
+        for installer_key, resolved in squashed_uninstalled.items():
             try:
                 self.install_resolved(installer_key, resolved, simulate=simulate,
                                       interactive=interactive, reinstall=reinstall, continue_on_error=continue_on_error,
-                                      verbose=verbose, quiet=quiet)
+                                      verbose=verbose, quiet=quiet, oneshot=oneshot)
             except InstallFailed as e:
                 if not continue_on_error:
                     raise
@@ -522,7 +520,7 @@ class RosdepInstaller(object):
         if failures:
             raise InstallFailed(failures=failures)
 
-    def install_resolved(self, installer_key, resolved, simulate=False, interactive=True,
+    def install_resolved(self, installer_key, resolved, simulate=False, interactive=True, oneshot=[],
                          reinstall=False, continue_on_error=False, verbose=False, quiet=False):
         """
         Lower-level API for installing a rosdep dependency.  The
@@ -542,7 +540,7 @@ class RosdepInstaller(object):
         """
         installer_context = self.installer_context
         installer = installer_context.get_installer(installer_key)
-        command = installer.get_install_command(resolved, interactive=interactive, reinstall=reinstall, quiet=quiet)
+        command = installer.get_install_command(resolved, interactive=interactive, reinstall=reinstall, quiet=quiet, oneshot=oneshot)
         if not command:
             if verbose:
                 print('#No packages to install')

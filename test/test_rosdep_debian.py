@@ -123,12 +123,22 @@ def test_AptInstaller():
         assert [] == installer.get_install_command(['fake'])
 
         mock_get_packages_to_install.return_value = ['a', 'b']
-        expected = [expected_prefix + ['apt-get', 'install', '-y', 'a', 'b']]
+        expected = [expected_prefix + ['apt-get', 'install', '-y', 'a'],
+                    expected_prefix + ['apt-get', 'install', '-y', 'b']]
         val = installer.get_install_command(['whatever'], interactive=False)
+        assert val == expected, val
+        expected = [expected_prefix + ['apt-get', 'install', 'a'],
+                    expected_prefix + ['apt-get', 'install', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=True)
+        assert val == expected, val
+
+        # oneshot
+        expected = [expected_prefix + ['apt-get', 'install', '-y', 'a', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=False, oneshot=["apt"])
         print('VAL', val)
         assert val == expected, val
         expected = [expected_prefix + ['apt-get', 'install', 'a', 'b']]
-        val = installer.get_install_command(['whatever'], interactive=True)
+        val = installer.get_install_command(['whatever'], interactive=True, oneshot=["apt"])
         assert val == expected, val
     try:
         if hasattr(os, 'geteuid'):

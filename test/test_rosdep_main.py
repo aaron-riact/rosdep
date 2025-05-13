@@ -195,6 +195,27 @@ class TestRosdepMain(unittest.TestCase):
                     '--from-paths', catkin_tree
                 ] + cmd_extras)
                 stdout, stderr = b
+                expected = [
+                    '#[apt] Installation commands:',
+                    '  sudo -H apt-get install ros-fuerte-catkin',
+                    '  sudo -H apt-get install libboost1.40-all-dev',
+                    '  sudo -H apt-get install libeigen3-dev',
+                    '  sudo -H apt-get install libtinyxml-dev',
+                    '  sudo -H apt-get install libltdl-dev',
+                    '  sudo -H apt-get install libtool',
+                    '  sudo -H apt-get install libcurl4-openssl-dev',
+                 ]
+                lines = stdout.getvalue().splitlines()
+                assert set(lines) == set(expected), lines
+            with fakeout() as b:
+                rosdep_main([
+                    'install', '-s', '-i',
+                    '--one-shot', "apt",
+                    '--os', 'ubuntu:lucid',
+                    '--rosdistro', 'fuerte',
+                    '--from-paths', catkin_tree
+                ] + cmd_extras)
+                stdout, stderr = b
                 # the output is sorted in ascending order
                 expected = [
                     '#[apt] Installation commands:',

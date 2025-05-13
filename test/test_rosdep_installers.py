@@ -616,6 +616,24 @@ def test_RosdepInstaller_install_resolved(mock_geteuid):
                 raise
             raise SkipTest('targets ubuntu systems only')
     stdout_lines = [x.strip() for x in stdout.getvalue().split('\n') if x.strip()]
+    assert len(stdout_lines) == 3
+    assert stdout_lines[0] == '#[apt] Installation commands:'
+    assert 'sudo -H apt-get install rosdep-fake1' in stdout_lines, 'stdout_lines: %s' % stdout_lines
+    assert 'sudo -H apt-get install rosdep-fake2' in stdout_lines, 'stdout_lines: %s' % stdout_lines
+
+
+    # oneshot
+    with fakeout() as (stdout, stderr):
+        try:
+            installer.install_resolved(APT_INSTALLER, ['rosdep-fake1', 'rosdep-fake2'], simulate=True, verbose=True, oneshot=['apt'])
+        except OSError as e:
+            if not any(msg in str(e) for msg in (
+                '[Errno 2] No such file or directory',
+                '[WinError 2] The system cannot find the file specified',
+            )):
+                raise
+            raise SkipTest('targets ubuntu systems only')
+    stdout_lines = [x.strip() for x in stdout.getvalue().split('\n') if x.strip()]
     assert len(stdout_lines) == 2
     assert stdout_lines[0] == '#[apt] Installation commands:'
     assert 'sudo -H apt-get install rosdep-fake1 rosdep-fake2' in stdout_lines, 'stdout_lines: %s' % stdout_lines

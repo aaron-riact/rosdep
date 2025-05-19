@@ -293,7 +293,7 @@ class AptInstaller(PackageManagerInstaller):
         return ['apt-get {}'.format(version)]
 
     def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
-        packages = self.get_packages_to_install(resolved, reinstall=reinstall)
+        packages = resolved
         if not packages:
             return []
         base_cmd = ['apt-get', 'install']

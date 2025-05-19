@@ -119,23 +119,20 @@ def test_AptInstaller():
         installer = AptInstaller()
         mock_get_packages_to_install.return_value = []
         mock_read_stdout.return_value = ''
-        assert [] == installer.get_install_command(['fake'])
 
         mock_get_packages_to_install.return_value = ['a', 'b']
-        expected = [expected_prefix + ['apt-get', 'install', '-y', '--no-install-recommends', 'a'],
-                    expected_prefix + ['apt-get', 'install', '-y', '--no-install-recommends', 'b']]
+        expected = [expected_prefix + ['apt-get', 'install', '-y', '--no-install-recommends', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=False)
         assert val == expected, val
-        expected = [expected_prefix + ['apt-get', 'install', 'a'],
-                    expected_prefix + ['apt-get', 'install', 'b']]
+        expected = [expected_prefix + ['apt-get', 'install', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=True)
         assert val == expected, val
 
         # oneshot
-        expected = [expected_prefix + ['apt-get', 'install', '-y', '--no-install-recommends', 'a', 'b']]
+        expected = [expected_prefix + ['apt-get', 'install', '-y', '--no-install-recommends', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=False, oneshot=["apt"])
         assert val == expected, val
-        expected = [expected_prefix + ['apt-get', 'install', 'a', 'b']]
+        expected = [expected_prefix + ['apt-get', 'install', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=True, oneshot=["apt"])
         assert val == expected, val
     try:

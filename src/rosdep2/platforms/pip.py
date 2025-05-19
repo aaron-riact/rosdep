@@ -212,7 +212,7 @@ class PipInstaller(PackageManagerInstaller):
             raise InstallFailed((PIP_INSTALLER, 'pip is not installed'))
         if not externally_managed_installable():
             raise InstallFailed((PIP_INSTALLER, EXTERNALLY_MANAGED_EXPLAINER))
-        packages = self.get_packages_to_install(resolved, reinstall=reinstall)
+        packages = resolved
         if not packages:
             return []
         cmd = pip_cmd + ['install', '-U']

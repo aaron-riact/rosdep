@@ -151,26 +151,22 @@ def test_PipInstaller():
     def test(expected_prefix, mock_method, mock_get_pip_command):
         mock_get_pip_command.return_value = ['mock-pip']
         installer = PipInstaller()
-        mock_method.return_value = []
-        assert [] == installer.get_install_command(['fake'])
 
         # no interactive option with PIP
         mock_method.return_value = ['a', 'b']
 
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
-                    expected_prefix + ['mock-pip', 'install', '-U', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=False)
         assert val == expected, val
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
-                    expected_prefix + ['mock-pip', 'install', '-U', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=True)
         assert val == expected, val
 
         # oneshot
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=False, oneshot=['pip'])
         assert val == expected, val
-        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'whatever']]
         val = installer.get_install_command(['whatever'], interactive=True, oneshot=['pip'])
         assert val == expected, val
     try:

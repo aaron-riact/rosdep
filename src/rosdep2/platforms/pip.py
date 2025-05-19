@@ -206,13 +206,12 @@ class PipInstaller(PackageManagerInstaller):
         ]
         return version_strings
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
+    def get_install_command(self, packages, interactive=True, reinstall=False, quiet=False, oneshot=[]):
         pip_cmd = get_pip_command()
         if not pip_cmd:
             raise InstallFailed((PIP_INSTALLER, 'pip is not installed'))
         if not externally_managed_installable():
             raise InstallFailed((PIP_INSTALLER, EXTERNALLY_MANAGED_EXPLAINER))
-        packages = resolved
         if not packages:
             return []
         cmd = pip_cmd + ['install', '-U']

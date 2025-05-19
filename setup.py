@@ -48,6 +48,7 @@ kwargs = {
                         'dependencies on a variety of platforms. '
                         'Includes extra command line options to make integration'
                         'with automated build systems more convenient',
+    'long_description_content_type': 'text/x-rst',
     'license': 'BSD',
 }
 if 'SKIP_PYTHON_MODULES' in os.environ:

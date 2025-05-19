@@ -338,6 +338,8 @@ def _rosdep_main(args):
                       action='store_true', help='print rosdep version and version of installers, then exit')
     parser.add_option('--reinstall', dest='reinstall', default=False,
                       action='store_true', help='(re)install all dependencies, even if already installed')
+    parser.add_option('--include-installed', default=False,
+                      action='store_true', help='install all dependencies, even if already installed (but not reinstall)')
     parser.add_option('--default-yes', '-y', dest='default_yes', default=False,
                       action='store_true', help='Tell the package manager to default to y or fail when installing')
     parser.add_option('--simulate', '-s', dest='simulate', default=False,
@@ -750,7 +752,7 @@ def _resolve_dependencies(lookup, packages, options):
         print('ERROR: unable to process all dependencies:\n\t%s' % (e), file=sys.stderr)
         raise
 
-    if options.reinstall:
+    if options.reinstall or options.include_installed:
         if options.verbose:
             print('reinstall is true, treating all dependencies as uninstalled')
         uninstalled = resolutions

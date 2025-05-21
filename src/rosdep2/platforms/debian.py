@@ -160,7 +160,7 @@ def _read_apt_cache_showpkg(packages, exec_fn=None):
     second, boolean, parameter.
     """
 
-    cmd = ['apt-cache', 'showpkg'] + packages
+    cmd = ['apt-cache', 'showpkg'] + list(packages)
     if exec_fn is None:
         exec_fn = read_stdout
 

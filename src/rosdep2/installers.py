@@ -454,9 +454,8 @@ class RosdepInstaller(object):
             # only create key if there is something to do
             if packages_to_install:
                 if installer_key not in uninstalled:
-                    uninstalled[installer_key] = []
-                # TODO deduplicate
-                uninstalled[installer_key].extend(packages_to_install)
+                    uninstalled[installer_key] = set()
+                uninstalled[installer_key].update(packages_to_install)
             if verbose:
                 print('uninstalled: [%s]' % (', '.join([str(p) for p in packages_to_install])))
 

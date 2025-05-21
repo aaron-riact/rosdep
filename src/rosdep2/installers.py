@@ -404,7 +404,7 @@ class PackageManagerInstaller(Installer):
 
 def normalize_uninstalled_to_list(uninstalled):
     uninstalled_dependencies = []
-    for pkg_or_list in [v for k, v in uninstalled]:
+    for pkg_or_list in [v for k, v in uninstalled.items()]:
         if isinstance(pkg_or_list, list):
             for pkg in pkg_or_list:
                 uninstalled_dependencies.append(str(pkg))
@@ -437,7 +437,7 @@ class RosdepInstaller(object):
         """
 
         # for each installer, figure out what is left to install
-        uninstalled = []
+        uninstalled = {}
         for installer_key, resolved in resolutions:  # py3k
             if verbose:
                 print('resolution: %s [%s]' % (installer_key, ', '.join([str(r) for r in resolved])))
@@ -453,7 +453,10 @@ class RosdepInstaller(object):
 
             # only create key if there is something to do
             if packages_to_install:
-                uninstalled.append((installer_key, packages_to_install))
+                if installer_key not in uninstalled:
+                    uninstalled[installer_key] = []
+                # TODO deduplicate
+                uninstalled[installer_key].extend(packages_to_install)
             if verbose:
                 print('uninstalled: [%s]' % (', '.join([str(p) for p in packages_to_install])))
 
@@ -499,7 +502,7 @@ class RosdepInstaller(object):
             print('install: uninstalled keys are %s' % ', '.join(uninstalled_list))
 
         failures = []
-        for installer_key, resolved in uninstalled: #.items():
+        for installer_key, resolved in uninstalled.items():
             try:
                 self.install_resolved(installer_key, resolved, simulate=simulate,
                                       interactive=interactive, reinstall=reinstall, continue_on_error=continue_on_error,

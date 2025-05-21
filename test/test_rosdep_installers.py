@@ -471,24 +471,22 @@ def test_RosdepInstaller_get_uninstalled():
         expected = set(['libltdl-dev', 'libboost1.40-all-dev', 'libtool'])
         resolutions, errors = lookup.resolve_all(['roscpp_fake'], context)
         uninstalled = installer.get_uninstalled(resolutions, verbose)
-        keys, values = zip(*uninstalled)
         apt_uninstalled = []
-        for k, v in uninstalled:
+        for k, v in uninstalled.items():
             if k == APT_INSTALLER:
                 apt_uninstalled.extend(v)
-        assert list(set(keys)) == [APT_INSTALLER]
+        assert list(set(uninstalled.keys())) == [APT_INSTALLER]
         assert set(apt_uninstalled) == expected
         assert not errors
 
         expected = ['libtinyxml-dev']
         resolutions, errors = lookup.resolve_all(['rospack_fake'], context)
         uninstalled = installer.get_uninstalled(resolutions, verbose)
-        keys, values = zip(*uninstalled)
         apt_uninstalled = []
-        for k, v in uninstalled:
+        for k, v in uninstalled.items():
             if k == APT_INSTALLER:
                 apt_uninstalled.extend(v)
-        assert list(set(keys)) == [APT_INSTALLER]
+        assert list(set(uninstalled.keys())) == [APT_INSTALLER]
         assert apt_uninstalled == expected, uninstalled
         assert not errors
 

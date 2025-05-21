@@ -766,9 +766,9 @@ def command_check(lookup, packages, options):
     uninstalled, errors, _ = _resolve_dependencies(lookup, packages, options)
 
     # pretty print the result
-    if any(v for k, v in uninstalled):
+    if any(v for k, v in uninstalled.items()):
         print('System dependencies have not been satisfied:')
-        for installer_key, resolved in uninstalled:
+        for installer_key, resolved in uninstalled.items():
             if resolved:
                 for r in resolved:
                     print('%s\t%s' % (installer_key, r))

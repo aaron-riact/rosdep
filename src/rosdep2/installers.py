@@ -498,15 +498,8 @@ class RosdepInstaller(object):
             uninstalled_list = normalize_uninstalled_to_list(uninstalled)
             print('install: uninstalled keys are %s' % ', '.join(uninstalled_list))
 
-        # Squash uninstalled again, in case some dependencies were already installed
-        squashed_uninstalled = {}
-        for installer_key, resolved in uninstalled:
-            if installer_key not in squashed_uninstalled:
-                squashed_uninstalled[installer_key] = []
-            squashed_uninstalled[installer_key].extend(resolved)
-
         failures = []
-        for installer_key, resolved in squashed_uninstalled.items():
+        for installer_key, resolved in uninstalled: #.items():
             try:
                 self.install_resolved(installer_key, resolved, simulate=simulate,
                                       interactive=interactive, reinstall=reinstall, continue_on_error=continue_on_error,

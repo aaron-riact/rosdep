@@ -46,7 +46,7 @@ kwargs = {
     'description': 'rosdep - enhanced with lovely quality of life improvements',
     'long_description': 'Command-line tool for installing system '
                         'dependencies on a variety of platforms. '
-                        'Includes extra command line options to make integration'
+                        'Includes extra command line options to make integration '
                         'with automated build systems more convenient',
     'long_description_content_type': 'text/x-rst',
     'license': 'BSD',

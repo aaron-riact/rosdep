@@ -7,7 +7,7 @@
 #vim ~/.pypirc
 #twine upload dist/rosdep2-0.25.1.tar.gz dist/rosdep2-0.25.1-py3-none-any.whl
 
-LAST_LINE="$(python3 -m build --sdist --wheel | tail -1)"
+LAST_LINE="$(python3 -m build | tail -1)"
 
 echo $LAST_LINE
 

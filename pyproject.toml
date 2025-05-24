@@ -38,6 +38,4 @@ Homepage = "https://github.com/krisl/rosdep"
 
 [project.scripts]
 rosdep = "rosdep2.main:rosdep_main"
-rosdep-source = "rosdep2.sources_list:main"
-rosdep-check = "rosdep2.rosdep_check:main"
-rosdep-db = "rosdep2.rosdep_db:main"
+rosdep-source = "rosdep2.install:install_main"

@@ -433,7 +433,12 @@ class RosdepLookup(object):
         except KeyError as e:
             raise RosdepInternalError(e)
 
-        return resolutions_flat, errors
+        resolutions = {}
+        for installer_key, resolved in resolutions_flat:  # py3k
+            if installer_key not in resolutions:
+                resolutions[installer_key] = set()
+            resolutions[installer_key].update(resolved)
+        return resolutions, errors
 
     def resolve(self, rosdep_key, resource_name, installer_context):
         """

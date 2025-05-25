@@ -3,6 +3,3 @@ import importlib.metadata
 # - setup.py
 # - stdeb.cfg
 __version__ = importlib.metadata.version("rosdep2")
-
-
-print(f"{__version__=}")

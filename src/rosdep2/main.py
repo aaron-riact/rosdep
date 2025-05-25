@@ -755,7 +755,11 @@ def _resolve_dependencies(lookup, packages, options):
     if options.reinstall or options.include_installed:
         if options.verbose:
             print('reinstall is true, treating all dependencies as uninstalled')
-        uninstalled = resolutions
+        uninstalled = {}
+        for installer_key, resolved in resolutions:  # py3k
+            if installer_key not in uninstalled:
+                uninstalled[installer_key] = set()
+            uninstalled[installer_key].update(resolved)
     else:
         uninstalled = installer.get_uninstalled(resolutions, verbose=options.verbose)
 

@@ -427,17 +427,12 @@ class RosdepLookup(object):
         try:
             # TODO: I really don't like AssertionErrors here; this should be modeled as 'CyclicGraphError'
             # or something more explicit. No need to continue if this API errors.
-            resolutions_flat = depend_graph.get_ordered_dependency_list()
+            resolutions = depend_graph.get_ordered_dependency_list()
         except AssertionError as e:
             raise InvalidData('cycle in dependency graph detected: %s' % (e))
         except KeyError as e:
             raise RosdepInternalError(e)
 
-        resolutions = {}
-        for installer_key, resolved in resolutions_flat:  # py3k
-            if installer_key not in resolutions:
-                resolutions[installer_key] = set()
-            resolutions[installer_key].update(resolved)
         return resolutions, errors
 
     def resolve(self, rosdep_key, resource_name, installer_context):

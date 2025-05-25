@@ -438,7 +438,7 @@ class RosdepInstaller(object):
 
         # for each installer, figure out what is left to install
         uninstalled = {}
-        for installer_key, resolved in resolutions:  # py3k
+        for installer_key, resolved in resolutions.items():  # py3k
             if verbose:
                 print('resolution: %s [%s]' % (installer_key, ', '.join([str(r) for r in resolved])))
             try:

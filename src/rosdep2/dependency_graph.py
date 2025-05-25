@@ -128,7 +128,7 @@ class DependencyGraph(defaultdict):
             if installer_key not in squashed_result:
                 squashed_result[installer_key] = []
             squashed_result[installer_key].extend(resolved)
-        return [*squashed_result.items()]
+        return squashed_result
 
     def __get_ordered_uninstalled(self, key):
         uninstalled = []

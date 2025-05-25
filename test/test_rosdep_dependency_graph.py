@@ -42,7 +42,7 @@ def test_DependencyGraph_Linear():
     dg['C']['install_keys'] = ['c']
     dg['C']['dependencies'] = []
     result = dg.get_ordered_dependency_list()
-    expected = [('c_installer', ['c']), ('b_installer', ['b']), ('a_installer', ['a'])]
+    expected = {'c_installer': ['c'], 'b_installer': ['b'], 'a_installer': ['a']}
     assert result == expected, 'Results did not match expectations: %s == %s' % (str(result), str(expected))
 
 
@@ -156,8 +156,8 @@ def test_DependencyGraph_Multi_Root():
     # [('c_installer', ['c']), ('d_installer', ['d']), ('b_installer', ['b']), ('a_installer', ['a'])]
     # But that wont invalidate the order from a dependency graph stand point
     expected = [
-        [('c_installer', ['c']), ('b_installer', ['b']), ('a_installer', ['a']), ('d_installer', ['d'])],
-        [('c_installer', ['c']), ('d_installer', ['d']), ('b_installer', ['b']), ('a_installer', ['a'])],
+        {'c_installer': ['c'], 'b_installer': ['b'], 'a_installer': ['a'], 'd_installer': ['d']},
+        {'c_installer': ['c'], 'd_installer': ['d'], 'b_installer': ['b'], 'a_installer': ['a']},
     ]
     assert result in expected, 'Results did not match expectations: %s == %s' % (str(result), str(expected))
 
@@ -173,5 +173,5 @@ def test_DependencyGraph_Realworld():
     dg['pkg-config']['install_keys'] = ['pkg-config']
     dg['pkg-config']['dependencies'] = []
     result = dg.get_ordered_dependency_list()
-    expected = [('homebrew', ['pkg-config']), ('pip', ['matplotlib'])]
+    expected = {'homebrew': ['pkg-config'], 'pip': ['matplotlib']}
     assert result == expected, 'Results did not match expectations: %s == %s' % (str(result), str(expected))

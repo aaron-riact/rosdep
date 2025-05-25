@@ -562,7 +562,7 @@ def test_RosdepInstaller_get_uninstalled_unconfigured():
 
     # annoying mock to test generally impossible error condition
     lookup = Mock(spec=RosdepLookup)
-    lookup.resolve_all.return_value = ([('bad-key', ['stuff'])], [])
+    lookup.resolve_all.return_value = ({'bad-key': ['stuff']}, [])
 
     installer = RosdepInstaller(context)
     try:

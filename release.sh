@@ -6,6 +6,7 @@
 #twine upload dist/rosdep2-0.25.1.tar.gz dist/rosdep2-0.25.1-py3-none-any.whl
 #vim ~/.pypirc
 #twine upload dist/rosdep2-0.25.1.tar.gz dist/rosdep2-0.25.1-py3-none-any.whl
+# https://github.com/astral-sh/uv/issues/7676
 
 LAST_LINE="$(uv build 2>&1 | tail -2)"
 

@@ -20,4 +20,4 @@ BITS="$(echo $LAST_LINE | cut -d ' ' -f 3,6)"
 #done;
 
 
-echo "uv publish $(echo $BITS | cut -d ' ' -f 1) $(echo $BITS | cut -d ' ' -f 2) --token <TOKEN>"
+echo "uv publish $(echo $BITS | cut -d ' ' -f 1) $(echo $BITS | cut -d ' ' -f 2) --token \$(awk -F '= ' '/password/ {print \$2}' ~/.pypirc)"

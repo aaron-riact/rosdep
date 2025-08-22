@@ -153,3 +153,58 @@ In this ambiguous case, rosdep first interprets the key as a
 ``PACKAGE_MANAGER``.  If this test fails, it will be interpreted as an
 ``OS_VERSION``.  Developers should exercise caution in keeping
 ``OS_VERSION`` and ``PACKAGE_MANAGER`` keys globally distinct.
+
+
+Virtual Packages
+----------------
+
+Virtual packages are an important concept when working with system package managers, particularly on Debian and Ubuntu systems. Understanding how rosdep handles virtual packages can help you write more flexible and portable dependency specifications.
+
+What are virtual packages?
+'''''''''''''''''''''''''''
+
+A virtual package is a package name that doesn't correspond to a single installable package. Instead, it represents an abstract dependency that can be satisfied by one or more different real packages. Virtual packages are commonly used to:
+
+* Provide multiple implementation choices (e.g., different SSL libraries)
+* Allow for system-specific optimizations
+* Maintain backwards compatibility when package names change
+
+How rosdep handles virtual packages
+'''''''''''''''''''''''''''''''''''
+
+When rosdep encounters a virtual package on Debian/Ubuntu systems:
+
+1. It uses ``apt-cache showpkg`` to determine if a package is virtual
+2. Virtual packages are identified by having no versions but having providers in the "Reverse Provides" section
+3. During installation, rosdep automatically selects an appropriate provider
+
+Using virtual packages in rosdep rules
+'''''''''''''''''''''''''''''''''''''''
+
+You can specify virtual packages in your rosdep rules just like regular packages:
+
+::
+
+    libcurl-dev:
+      ubuntu:
+        apt:
+          packages: [libcurl-dev]
+      debian:
+        apt:
+          packages: [libcurl-dev]
+
+In this example, ``libcurl-dev`` is a virtual package that can be provided by:
+
+* ``libcurl4-openssl-dev`` (OpenSSL implementation)
+* ``libcurl4-gnutls-dev`` (GnuTLS implementation)  
+* ``libcurl4-nss-dev`` (NSS implementation)
+
+The system's package manager will automatically choose the most appropriate provider based on what's already installed and the system's configuration.
+
+Benefits of using virtual packages
+'''''''''''''''''''''''''''''''''''
+
+* **Flexibility**: Allows different systems to use different implementations
+* **Simplicity**: ROS packages don't need to know about implementation details
+* **Maintainability**: Changes in underlying package names don't require updates to all dependent packages
+* **System optimization**: Package managers can choose implementations that work best with existing installations

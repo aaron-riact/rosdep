@@ -125,3 +125,57 @@ If you are uncertain the name of a key or package, use ``rosdep search <searchst
 
 For more information, please see the :ref:`command reference <rosdep_usage>`.
 
+
+Understanding Virtual Packages
+------------------------------
+
+rosdep supports the concept of *virtual packages*, which are particularly important when working with Debian and Ubuntu systems.
+
+What is a virtual package?
+'''''''''''''''''''''''''''
+
+A virtual package is an abstract package name that doesn't correspond to a single installable package, but instead represents a capability or interface that can be provided by one or more different real packages. Virtual packages are used to:
+
+* Provide flexibility in package selection
+* Allow multiple packages to satisfy the same dependency
+* Abstract away implementation details from dependents
+
+How virtual packages work in rosdep
+''''''''''''''''''''''''''''''''''''
+
+When rosdep encounters a virtual package on Debian/Ubuntu systems, it:
+
+1. Uses ``apt-cache showpkg`` to detect if a package is virtual
+2. A package is considered virtual if it has no versions but has providers listed in the "Reverse Provides" section
+3. When installing, rosdep can substitute the virtual package with one of its concrete providers
+
+Example
+'''''''
+
+A common example is ``libcurl-dev``:
+
+.. code-block:: bash
+
+    $ apt-cache showpkg libcurl-dev
+    Package: libcurl-dev
+    Versions: 
+    
+    Reverse Depends: 
+      libdap-dev,libcurl-dev
+      libnxml0-dev,libcurl-dev
+      libglyr-dev,libcurl-dev
+    Dependencies: 
+    Provides: 
+    Reverse Provides: 
+    libcurl4-openssl-dev 7.47.0-1ubuntu2.4 (= )
+    libcurl4-nss-dev 7.47.0-1ubuntu2.4 (= )
+    libcurl4-gnutls-dev 7.47.0-1ubuntu2.4 (= )
+
+In this case:
+
+* ``libcurl-dev`` is a virtual package (no versions listed)
+* It can be provided by ``libcurl4-openssl-dev``, ``libcurl4-nss-dev``, or ``libcurl4-gnutls-dev``
+* rosdep will select one of these providers when installing
+
+This allows ROS packages to depend on "libcurl-dev" without needing to know which specific SSL implementation should be used on the target system.
+

@@ -164,7 +164,7 @@ def pip_detect(pkgs, exec_fn=None):
     if exec_fn is None:
         exec_fn = read_stdout
         fallback_to_pip_show = True
-    pkg_list = exec_fn(pip_cmd + ['freeze']).split('\n')
+    pkg_list = [x for x in exec_fn(pip_cmd + ['freeze']).split('\n') if x]
 
     ret_list = []
     version_list = []

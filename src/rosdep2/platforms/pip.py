@@ -174,10 +174,8 @@ def pip_detect(pkgs, exec_fn=None):
     if not pip_cmd:
         return []
 
-    fallback_to_pip_show = False
     if exec_fn is None:
         exec_fn = read_stdout
-        fallback_to_pip_show = True
     pkg_list = exec_fn(pip_cmd + ['freeze']).split('\n')
     pkg_list = [p for p in pkg_list if len(p) > 0]
 
@@ -200,32 +198,6 @@ def pip_detect(pkgs, exec_fn=None):
         for pkg in [ver for ver in version_list if ver[0] == req.name]:
             if pkg[1] is None or pkg[1] in req.specifier:
                 ret_list.append(req.name)
-
-    # Try to detect with the return code of `pip show`.
-    # This can show the existance of things like `argparse` which
-    # otherwise do not show up.
-    # See:
-    #   https://github.com/pypa/pip/issues/1570#issuecomment-71111030
-    if fallback_to_pip_show:
-        for req in [r for r in req_list if r.name not in ret_list]:
-            # does not see retcode but stdout for old pip to check if installed
-            proc = subprocess.Popen(
-                pip_cmd + ['show', req.name],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT
-            )
-            output, _ = proc.communicate()
-            output = output.strip()
-            if proc.returncode == 0 and output:
-                # `pip show` detected it, check the version.
-                show_split = output.split('\n')
-
-                for line in [s for s in show_split if s.startswith('Version:')]:
-                    version = parse_version(line.strip().split()[1])
-
-                    if version is None or version in req.specifier:
-                        # version matches, add it to the list
-                        ret_list.append(req.name)
 
     return ret_list
 

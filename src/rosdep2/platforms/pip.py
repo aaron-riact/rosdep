@@ -39,7 +39,7 @@ try:
 except ImportError:
     import importlib_metadata
 
-from packaging.requirements import Requirement
+from packaging.requirements import Requirement, canonicalize_name
 from packaging.version import InvalidVersion, parse
 from ..core import InstallFailed
 from ..installers import PackageManagerInstaller
@@ -195,7 +195,7 @@ def pip_detect(pkgs, exec_fn=None):
         req_list.append(Requirement(pkg))
 
     for req in req_list:
-        for pkg in [ver for ver in version_list if ver[0] == req.name]:
+        for pkg in [ver for ver in version_list if ver[0] == canonicalize_name(req.name)]:
             if pkg[1] is None or pkg[1] in req.specifier:
                 ret_list.append(req.name)
 

@@ -198,6 +198,12 @@ def pip_detect(pkgs, exec_fn=None):
     def canonicalize_name(name):
         return re.sub(r"[-_.]+", "-", name).lower()
 
+    if (os.environ.get('ROSDEP_DEBUG') or '').lower() in ('yes', '1', 'true'):
+        print("REQ:", req_list)
+        print("PKG:", pkgs)
+        print("VER:", version_list)
+        print("PKGLST:", pkg_list)
+
     for req in req_list:
         for pkg in [ver for ver in version_list if canonicalize_name(ver[0]) == canonicalize_name(req.name)]:
             if pkg[1] is None or pkg[1] in req.specifier:

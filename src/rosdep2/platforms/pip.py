@@ -30,6 +30,7 @@
 import os
 import subprocess
 import sys
+import re
 
 from configparser import ConfigParser
 from pathlib import Path
@@ -39,7 +40,7 @@ try:
 except ImportError:
     import importlib_metadata
 
-from packaging.requirements import Requirement, canonicalize_name
+from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, parse
 from ..core import InstallFailed
 from ..installers import PackageManagerInstaller
@@ -193,6 +194,9 @@ def pip_detect(pkgs, exec_fn=None):
 
     for pkg in pkgs:
         req_list.append(Requirement(pkg))
+
+    def canonicalize_name(name):
+        return re.sub(r"[-_.]+", "-", name).lower()
 
     for req in req_list:
         for pkg in [ver for ver in version_list if ver[0] == canonicalize_name(req.name)]:

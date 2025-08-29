@@ -199,7 +199,7 @@ def pip_detect(pkgs, exec_fn=None):
         return re.sub(r"[-_.]+", "-", name).lower()
 
     for req in req_list:
-        for pkg in [ver for ver in version_list if ver[0] == canonicalize_name(req.name)]:
+        for pkg in [ver for ver in version_list if canonicalize_name(ver[0]) == canonicalize_name(req.name)]:
             if pkg[1] is None or pkg[1] in req.specifier:
                 ret_list.append(req.name)
 

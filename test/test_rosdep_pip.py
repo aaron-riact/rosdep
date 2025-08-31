@@ -255,4 +255,3 @@ def test_get_pip_command():
     test_pip2_or_pip3()
     test_sys_executable()
     test_python2_or_python3()
-

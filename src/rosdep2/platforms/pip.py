@@ -187,6 +187,16 @@ def pip_detect(pkgs, exec_fn=None):
     for pkg in pkg_list:
         pkg_row = pkg.split('==')
 
+        # skip over locally editable packages
+        line = pkg_row[0].strip()
+        if line.startswith("#") or line.startswith('-e'):
+            continue
+
+        # skip over other errors
+        if len(pkg_row) != 2:
+            print(f"Incomprehensibled package line: {pkg}")
+            continue
+
         # Account for some unusual instances of === instead of ==
         pkg_row[1] = pkg_row[1].strip('=')
 

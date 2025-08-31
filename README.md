@@ -7,4 +7,9 @@ rosdep is a command-line tool for installing system dependencies. For *end-users
 
 Includes support for pip alternatives like uv, and extra command line options to make integration with automated build systems more convenient
 
+* Runs `apt` and `pip` installs in a single command
+* Adds `--reinstall` option to the `check` command (to produce a list of all resolved dependencies, per installer)
+* Supports use of `uv` (and others) via environment variable `ROSDEP_PIP_CMD="uv pip"`
+* Supports pip package version specification in `rosdep.yaml`
+
 [rosdep Users/Developers Guide](http://docs.ros.org/independent/api/rosdep/html/)

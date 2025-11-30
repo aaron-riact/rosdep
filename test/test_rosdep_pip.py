@@ -156,6 +156,7 @@ def test_PipInstaller():
 
         # no interactive option with PIP
         mock_method.return_value = ['a', 'b']
+
         expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
                     expected_prefix + ['mock-pip', 'install', '-U', 'b']]
         val = installer.get_install_command(['whatever'], interactive=False)
@@ -163,6 +164,14 @@ def test_PipInstaller():
         expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a'],
                     expected_prefix + ['mock-pip', 'install', '-U', 'b']]
         val = installer.get_install_command(['whatever'], interactive=True)
+        assert val == expected, val
+
+        # oneshot
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=False, oneshot=['pip'])
+        assert val == expected, val
+        expected = [expected_prefix + ['mock-pip', 'install', '-U', 'a', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=True, oneshot=['pip'])
         assert val == expected, val
     try:
         if hasattr(os, 'geteuid'):

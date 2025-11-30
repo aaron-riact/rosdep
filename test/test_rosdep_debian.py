@@ -64,7 +64,6 @@ def test_dpkg_detect():
         val = dpkg_detect(['apt', 'tinyxml-dev', 'python'])
         assert val == ['apt', 'python'], val
         assert mock_read_stdout.call_count == 2
-        print(mock_read_stdout.call_args_list[0])
         assert mock_read_stdout.call_args_list[1] == call(['apt-cache', 'showpkg', 'tinyxml-dev'])
 
     # test version lock code (should be filtered out w/o validation)
@@ -126,11 +125,18 @@ def test_AptInstaller():
         expected = [expected_prefix + ['apt-get', 'install', '-y', 'a'],
                     expected_prefix + ['apt-get', 'install', '-y', 'b']]
         val = installer.get_install_command(['whatever'], interactive=False)
-        print('VAL', val)
         assert val == expected, val
         expected = [expected_prefix + ['apt-get', 'install', 'a'],
                     expected_prefix + ['apt-get', 'install', 'b']]
         val = installer.get_install_command(['whatever'], interactive=True)
+        assert val == expected, val
+
+        # oneshot
+        expected = [expected_prefix + ['apt-get', 'install', '-y', 'a', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=False, oneshot=["apt"])
+        assert val == expected, val
+        expected = [expected_prefix + ['apt-get', 'install', 'a', 'b']]
+        val = installer.get_install_command(['whatever'], interactive=True, oneshot=["apt"])
         assert val == expected, val
     try:
         if hasattr(os, 'geteuid'):

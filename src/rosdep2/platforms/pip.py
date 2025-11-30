@@ -206,7 +206,7 @@ class PipInstaller(PackageManagerInstaller):
         ]
         return version_strings
 
-    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False):
+    def get_install_command(self, resolved, interactive=True, reinstall=False, quiet=False, oneshot=[]):
         pip_cmd = get_pip_command()
         if not pip_cmd:
             raise InstallFailed((PIP_INSTALLER, 'pip is not installed'))
@@ -220,4 +220,6 @@ class PipInstaller(PackageManagerInstaller):
             cmd.append('-q')
         if reinstall:
             cmd.append('-I')
+        if 'pip' in oneshot:
+            return [self.elevate_priv(cmd + sorted(packages))]
         return [self.elevate_priv(cmd + [p]) for p in packages]

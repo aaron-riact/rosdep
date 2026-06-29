@@ -29,6 +29,7 @@ coverage==3.5
 cups==1.0
 distribute==0.6.10
 docutils==0.8
+ethernetip @ git+https://codeberg.org/aaron-riact/python-ethernetip.git@08912f391e2e245aefecbf00dba9fa8b6c650aa2
 epydoc==3.0.1
 fstab==1.4
 gnome-app-install==0.4.2ubuntu2

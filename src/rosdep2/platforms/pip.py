@@ -185,12 +185,20 @@ def pip_detect(pkgs, exec_fn=None):
     req_list = []
 
     for pkg in pkg_list:
-        pkg_row = pkg.split('==')
-
-        # skip over locally editable packages
-        line = pkg_row[0].strip()
-        if line.startswith("#") or line.startswith('-e'):
+        # skip over comments and locally editable packages
+        if pkg.strip().startswith("#") or pkg.strip().startswith('-e'):
             continue
+
+        # Packages installed from a direct URL reference (PEP 508) are
+        # reported by pip freeze using the " @ " separator instead of "==",
+        # e.g. "ethernetip @ git+https://example.com/pkg.git@branch". These
+        # have no comparable version, so record them with a version of None.
+        if ' @ ' in pkg:
+            name = pkg.split(' @ ', 1)[0].strip()
+            version_list.append((name, None))
+            continue
+
+        pkg_row = pkg.split('==')
 
         # skip over other errors
         if len(pkg_row) != 2:

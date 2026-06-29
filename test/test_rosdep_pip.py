@@ -74,6 +74,16 @@ def test_pip_detect():
     val = pip_detect(['Brlapi>0.5,<0.5.4'], exec_fn=m)
     assert val == [], val
 
+    # packages installed from a direct URL reference (PEP 508) are reported by
+    # pip freeze using the " @ " separator instead of "=="
+    val = pip_detect(
+        ['ethernetip @ git+https://codeberg.org/aaron-riact/python-ethernetip.git@feat/adapter-mode'],
+        exec_fn=m)
+    assert val == ['ethernetip'], val
+
+    val = pip_detect(['paramiko', 'ethernetip', 'fakito'], exec_fn=m)
+    assert val == ['paramiko', 'ethernetip'], val
+
 
 def test_PipInstaller_get_depends():
     # make sure PipInstaller supports depends

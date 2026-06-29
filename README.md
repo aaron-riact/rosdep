@@ -5,11 +5,12 @@ rosdep
 
 rosdep is a command-line tool for installing system dependencies. For *end-users*, rosdep helps you install system dependencies for software that you are building from source. For *developers*, rosdep simplifies the problem of installing system dependencies on different platforms. Instead of having to figure out which debian package on Ubuntu Oneiric contains Boost, you can just specify a dependency on 'boost'.
 
-Includes support for pip alternatives like uv, and extra command line options to make integration with automated build systems more convenient
+Includes support for pip alternatives like uv, PEP 508 package urls and extra command line options to make integration with automated build systems more convenient
 
-* Runs `apt` and `pip` installs in a single command
+* Runs `apt` and `pip` installs in a single command (each)
 * Adds `--reinstall` option to the `check` command (to produce a list of all resolved dependencies, per installer)
 * Supports use of `uv` (and others) via environment variable `ROSDEP_PIP_CMD="uv pip"`
 * Supports pip package version specification in `rosdep.yaml`
+* Supports "name @ package" format (PEP 508) for fetching packages from URLs (repos eg)
 
 [rosdep Users/Developers Guide](http://docs.ros.org/independent/api/rosdep/html/)
